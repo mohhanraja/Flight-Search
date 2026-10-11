@@ -1,0 +1,93 @@
+<section class="search-card card">
+  @if (airports$ | async; as airports) {
+    @switch (airports.status) {
+      @case ('loading') {
+        <app-loading-spinner label="Loading airports..." />
+      }
+      @case ('error') {
+        <app-error-message
+          title="Could not load airports"
+          [message]="airports.message"
+          (retry)="reloadAirports()"
+        />
+      }
+      @case ('success') {
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <div class="route-row">
+            <div class="field" [class.invalid]="isInvalid('from')">
+              <label for="from">From</label>
+              <select id="from" formControlName="from">
+                <option value="" disabled>Select airport</option>
+                @for (airport of airports.data; track airport.code) {
+                  <option [value]="airport.code">{{ airport.city }} ({{ airport.code }})</option>
+                }
+              </select>
+              @if (hasError('from', 'required')) {
+                <span class="error-text">Please choose where you are flying from.</span>
+              }
+            </div>
+
+            <button type="button" class="swap" (click)="swapAirports()" aria-label="Swap origin and destination">
+              &#8644;
+            </button>
+
+            <div class="field" [class.invalid]="isInvalid('to') || (form.hasError('sameAirport') && form.controls.to.touched)">
+              <label for="to">To</label>
+              <select id="to" formControlName="to">
+                <option value="" disabled>Select airport</option>
+                @for (airport of airports.data; track airport.code) {
+                  <option [value]="airport.code">{{ airport.city }} ({{ airport.code }})</option>
+                }
+              </select>
+              @if (hasError('to', 'required')) {
+                <span class="error-text">Please choose where you are flying to.</span>
+              }
+              @if (form.hasError('sameAirport') && form.controls.to.touched) {
+                <span class="error-text">Origin and destination must be different.</span>
+              }
+            </div>
+          </div>
+
+          <div class="details-row">
+            <div class="field" [class.invalid]="isInvalid('departureDate')">
+              <label for="departureDate">Departure date</label>
+              <input id="departureDate" type="date" formControlName="departureDate" [min]="today" />
+              @if (hasError('departureDate', 'required')) {
+                <span class="error-text">Departure date is required.</span>
+              }
+              @if (hasError('departureDate', 'pastDate')) {
+                <span class="error-text">Departure date cannot be in the past.</span>
+              }
+            </div>
+
+            <div
+              class="field"
+              [class.invalid]="isInvalid('returnDate') || (form.hasError('returnBeforeDeparture') && form.controls.returnDate.touched)"
+            >
+              <label for="returnDate">Return date <span class="optional">(optional)</span></label>
+              <input id="returnDate" type="date" formControlName="returnDate" [min]="returnMinDate" />
+              @if (hasError('returnDate', 'pastDate')) {
+                <span class="error-text">Return date cannot be in the past.</span>
+              }
+              @if (form.hasError('returnBeforeDeparture') && form.controls.returnDate.touched) {
+                <span class="error-text">Return date must be on or after the departure date.</span>
+              }
+            </div>
+
+            <div class="field" [class.invalid]="isInvalid('passengers')">
+              <label for="passengers">Passengers</label>
+              <input id="passengers" type="number" min="1" max="9" formControlName="passengers" />
+              @if (hasError('passengers', 'required')) {
+                <span class="error-text">Enter the number of passengers.</span>
+              } @else if (hasError('passengers', 'min') || hasError('passengers', 'max') || hasError('passengers', 'wholeNumber')) {
+                <span class="error-text">Passengers must be a whole number from 1 to 9.</span>
+              }
+            </div>
+
+            <button type="submit" class="btn btn-primary search-btn">Search flights</button>
+          </div>
+        </form>
+      }
+    }
+  }
+</section>

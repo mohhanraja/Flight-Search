@@ -1,0 +1,120 @@
+<div class="back-row">
+  @if (canGoBack) {
+    <button type="button" class="btn btn-ghost" (click)="goBack()">&larr; Back to results</button>
+  } @else {
+    <a routerLink="/search" class="btn btn-ghost">&larr; Search flights</a>
+  }
+</div>
+
+@if (view$ | async; as vm) {
+  @switch (vm.state.status) {
+    @case ('loading') {
+      <app-loading-spinner label="Loading flight details..." />
+    }
+    @case ('error') {
+      <app-error-message
+        title="Flight details unavailable"
+        [message]="vm.state.message"
+        (retry)="retry()"
+      />
+    }
+    @case ('success') {
+      <article class="details">
+        <header class="summary card">
+          <div class="airline">
+            <span class="airline-badge">{{ vm.state.data.airlineCode }}</span>
+            <div>
+              <h1>{{ vm.state.data.airline }}</h1>
+              <span class="muted">Flight {{ vm.state.data.flightNumber }}</span>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip" [class.good]="vm.state.data.refundable">
+              {{ vm.state.data.refundable ? 'Refundable' : 'Non-refundable' }}
+            </span>
+            @if (vm.state.data.seatsLeft <= 5) {
+              <span class="chip warn">Only {{ vm.state.data.seatsLeft }} seats left</span>
+            }
+          </div>
+        </header>
+
+        <section class="itinerary card" aria-label="Itinerary">
+          <div class="endpoint">
+            <strong class="time">{{ vm.state.data.departureTime | date: 'HH:mm' }}</strong>
+            <span class="date">{{ vm.state.data.departureTime | date: 'EEE, d MMM y' }}</span>
+            <span class="code">{{ vm.state.data.from }}</span>
+            <span class="muted">{{ vm.cities.get(vm.state.data.from) }}</span>
+          </div>
+
+          <div class="middle">
+            <span class="muted">{{ vm.state.data.durationMinutes | duration }}</span>
+            <span class="line"></span>
+            <span class="muted">{{ vm.state.data.stops | stops }}</span>
+          </div>
+
+          <div class="endpoint end">
+            <strong class="time">
+              {{ vm.state.data.arrivalTime | date: 'HH:mm' }}
+              @if (dayOffset(vm.state.data.departureTime, vm.state.data.arrivalTime) > 0) {
+                <sup>+{{ dayOffset(vm.state.data.departureTime, vm.state.data.arrivalTime) }}</sup>
+              }
+            </strong>
+            <span class="date">{{ vm.state.data.arrivalTime | date: 'EEE, d MMM y' }}</span>
+            <span class="code">{{ vm.state.data.to }}</span>
+            <span class="muted">{{ vm.cities.get(vm.state.data.to) }}</span>
+          </div>
+
+          @if (vm.state.data.stopovers.length) {
+            <ul class="stopovers">
+              @for (code of vm.state.data.stopovers; track code; let i = $index) {
+                <li>
+                  Stop in <strong>{{ vm.cities.get(code) ?? code }} ({{ code }})</strong> &middot; layover
+                  {{ vm.state.data.layoverMinutes[i] | duration }}
+                </li>
+              }
+            </ul>
+          }
+        </section>
+
+        <div class="columns">
+          <section class="card info" aria-label="Flight information">
+            <h2>Flight information</h2>
+            <dl>
+              <dt>Aircraft</dt>
+              <dd>{{ vm.state.data.aircraft }}</dd>
+              <dt>Cabin baggage</dt>
+              <dd>{{ vm.state.data.cabinBaggageKg }} kg</dd>
+              <dt>Check-in baggage</dt>
+              <dd>{{ vm.state.data.checkInBaggageKg }} kg</dd>
+              <dt>Meal</dt>
+              <dd>{{ vm.state.data.mealIncluded ? 'Included' : 'Available for purchase' }}</dd>
+              <dt>Seats left</dt>
+              <dd>{{ vm.state.data.seatsLeft }}</dd>
+            </dl>
+          </section>
+
+          <section class="card fare" aria-label="Fare breakdown">
+            <h2>Fare breakdown</h2>
+            <dl>
+              <dt>Base fare &times; {{ vm.passengers }}</dt>
+              <dd>
+                {{ vm.state.data.fare.baseFare * vm.passengers | currency: vm.state.data.currency : 'symbol' : '1.0-0' }}
+              </dd>
+              <dt>Taxes &amp; fees &times; {{ vm.passengers }}</dt>
+              <dd>
+                {{ vm.state.data.fare.taxesAndFees * vm.passengers | currency: vm.state.data.currency : 'symbol' : '1.0-0' }}
+              </dd>
+              <dt class="total">Total</dt>
+              <dd class="total">
+                {{ vm.state.data.price * vm.passengers | currency: vm.state.data.currency : 'symbol' : '1.0-0' }}
+              </dd>
+            </dl>
+            <small class="muted">
+              {{ vm.state.data.price | currency: vm.state.data.currency : 'symbol' : '1.0-0' }} per passenger
+            </small>
+          </section>
+        </div>
+      </article>
+    }
+  }
+}

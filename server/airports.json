@@ -1,0 +1,19 @@
+[
+  { "code": "MAA", "city": "Chennai", "name": "Chennai International Airport", "country": "India", "lat": 12.9941, "lon": 80.1709, "utcOffset": 330 },
+  { "code": "DEL", "city": "Delhi", "name": "Indira Gandhi International Airport", "country": "India", "lat": 28.5562, "lon": 77.1, "utcOffset": 330 },
+  { "code": "BOM", "city": "Mumbai", "name": "Chhatrapati Shivaji Maharaj International Airport", "country": "India", "lat": 19.0896, "lon": 72.8656, "utcOffset": 330 },
+  { "code": "BLR", "city": "Bengaluru", "name": "Kempegowda International Airport", "country": "India", "lat": 13.1986, "lon": 77.7066, "utcOffset": 330 },
+  { "code": "HYD", "city": "Hyderabad", "name": "Rajiv Gandhi International Airport", "country": "India", "lat": 17.2403, "lon": 78.4294, "utcOffset": 330 },
+  { "code": "CCU", "city": "Kolkata", "name": "Netaji Subhas Chandra Bose International Airport", "country": "India", "lat": 22.6547, "lon": 88.4467, "utcOffset": 330 },
+  { "code": "COK", "city": "Kochi", "name": "Cochin International Airport", "country": "India", "lat": 10.152, "lon": 76.4019, "utcOffset": 330 },
+  { "code": "GOI", "city": "Goa", "name": "Dabolim Airport", "country": "India", "lat": 15.3808, "lon": 73.8314, "utcOffset": 330 },
+  { "code": "AMD", "city": "Ahmedabad", "name": "Sardar Vallabhbhai Patel International Airport", "country": "India", "lat": 23.0772, "lon": 72.6347, "utcOffset": 330 },
+  { "code": "PNQ", "city": "Pune", "name": "Pune Airport", "country": "India", "lat": 18.5821, "lon": 73.9197, "utcOffset": 330 },
+  { "code": "CJB", "city": "Coimbatore", "name": "Coimbatore International Airport", "country": "India", "lat": 11.03, "lon": 77.0434, "utcOffset": 330 },
+  { "code": "IXM", "city": "Madurai", "name": "Madurai Airport", "country": "India", "lat": 9.8345, "lon": 78.0934, "utcOffset": 330 },
+  { "code": "TRV", "city": "Thiruvananthapuram", "name": "Trivandrum International Airport", "country": "India", "lat": 8.4821, "lon": 76.9201, "utcOffset": 330 },
+  { "code": "DXB", "city": "Dubai", "name": "Dubai International Airport", "country": "UAE", "lat": 25.2532, "lon": 55.3657, "utcOffset": 240 },
+  { "code": "SIN", "city": "Singapore", "name": "Changi Airport", "country": "Singapore", "lat": 1.3644, "lon": 103.9915, "utcOffset": 480 },
+  { "code": "CMB", "city": "Colombo", "name": "Bandaranaike International Airport", "country": "Sri Lanka", "lat": 7.1808, "lon": 79.8841, "utcOffset": 330 },
+  { "code": "BKK", "city": "Bangkok", "name": "Suvarnabhumi Airport", "country": "Thailand", "lat": 13.69, "lon": 100.7501, "utcOffset": 420 }
+]

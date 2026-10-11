@@ -1,0 +1,41 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  background: var(--brand);
+  color: #fff;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 0.9rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.brand-mark {
+  display: inline-block;
+  transform: rotate(-20deg);
+}
+
+main {
+  flex: 1;
+  padding-block: 1.5rem 3rem;
+}
+
+.app-footer {
+  padding-block: 1rem 1.5rem;
+  color: var(--muted);
+  text-align: center;
+}

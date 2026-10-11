@@ -1,0 +1,16 @@
+<header class="app-header">
+  <div class="container header-inner">
+    <a routerLink="/search" class="brand">
+      <span class="brand-mark" aria-hidden="true">&#9992;</span>
+      {{ title }}
+    </a>
+  </div>
+</header>
+
+<main class="container">
+  <router-outlet />
+</main>
+
+<footer class="container app-footer">
+  <small>Demo project, flight data comes from a local mock API</small>
+</footer>

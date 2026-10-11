@@ -1,0 +1,25 @@
+<h1>Search flights</h1>
+
+<app-search-form [value]="params$ | async" (search)="onSearch($event)" />
+
+<div class="results-area">
+  @if (state$ | async; as state) {
+    @switch (state.result.status) {
+      @case ('loading') {
+        <app-loading-spinner label="Searching flights..." />
+      }
+      @case ('error') {
+        <app-error-message
+          title="We couldn't load flights"
+          [message]="state.result.message"
+          (retry)="retry()"
+        />
+      }
+      @case ('success') {
+        <app-search-results [response]="state.result.data" [params]="state.params" />
+      }
+    }
+  } @else {
+    <p class="hint">Enter your trip details above to see available flights.</p>
+  }
+</div>

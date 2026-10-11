@@ -1,0 +1,51 @@
+<a
+  class="flight-card card"
+  [routerLink]="['/flights', flight.id]"
+  [queryParams]="{ passengers }"
+  [attr.aria-label]="'View details for ' + flight.airline + ' flight ' + flight.flightNumber"
+>
+  <div class="airline">
+    <span class="airline-badge">{{ flight.airlineCode }}</span>
+    <div>
+      <strong>{{ flight.airline }}</strong>
+      <small>{{ flight.flightNumber }}</small>
+    </div>
+  </div>
+
+  <div class="journey">
+    <div class="point">
+      <strong>{{ flight.departureTime | date: 'HH:mm' }}</strong>
+      <small>{{ flight.from }}</small>
+    </div>
+
+    <div class="path">
+      <small>{{ flight.durationMinutes | duration }}</small>
+      <span class="line" [class.has-stops]="flight.stops > 0"></span>
+      <small [class.nonstop]="flight.stops === 0">
+        {{ flight.stops | stops }}@if (flight.stopovers.length) {
+          <span> &middot; {{ flight.stopovers.join(', ') }}</span>
+        }
+      </small>
+    </div>
+
+    <div class="point">
+      <strong>
+        {{ flight.arrivalTime | date: 'HH:mm' }}
+        @if (dayOffset > 0) {
+          <sup class="day-offset">+{{ dayOffset }}</sup>
+        }
+      </strong>
+      <small>{{ flight.to }}</small>
+    </div>
+  </div>
+
+  <div class="price">
+    <strong>{{ flight.price | currency: flight.currency : 'symbol' : '1.0-0' }}</strong>
+    <small>per person</small>
+    @if (passengers > 1) {
+      <small class="total">
+        {{ flight.price * passengers | currency: flight.currency : 'symbol' : '1.0-0' }} for {{ passengers }}
+      </small>
+    }
+  </div>
+</a>

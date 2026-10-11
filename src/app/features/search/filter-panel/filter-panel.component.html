@@ -1,0 +1,59 @@
+<aside class="filters card" [formGroup]="form" aria-label="Filter flights">
+  <div class="filters-head">
+    <h2>Filters</h2>
+    <button type="button" class="link-btn" (click)="clear()">Clear all</button>
+  </div>
+
+  <div class="group">
+    <label for="sortBy">Sort by</label>
+    <select id="sortBy" formControlName="sortBy">
+      @for (option of sortOptions; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="group">
+    <label for="maxPrice">
+      Max price
+      <strong>{{ form.controls.maxPrice.value | currency: 'INR' : 'symbol' : '1.0-0' }}</strong>
+    </label>
+    <!-- min/max must come before value, otherwise the browser clamps the value -->
+    <input
+      id="maxPrice"
+      type="range"
+      step="100"
+      [min]="options.minPrice"
+      [max]="options.maxPrice"
+      [value]="form.controls.maxPrice.value"
+      (input)="setMaxPrice($event)"
+    />
+    <div class="range-labels">
+      <small>{{ options.minPrice | currency: 'INR' : 'symbol' : '1.0-0' }}</small>
+      <small>{{ options.maxPrice | currency: 'INR' : 'symbol' : '1.0-0' }}</small>
+    </div>
+  </div>
+
+  <div class="group">
+    <label for="maxStops">Stops</label>
+    <select id="maxStops" formControlName="maxStops">
+      @for (option of stopOptions; track option.label) {
+        <option [ngValue]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </div>
+
+  <fieldset class="group">
+    <legend>Airlines</legend>
+    @for (airline of options.airlines; track airline) {
+      <label class="check">
+        <input
+          type="checkbox"
+          [checked]="isAirlineSelected(airline)"
+          (change)="toggleAirline(airline, $event)"
+        />
+        {{ airline }}
+      </label>
+    }
+  </fieldset>
+</aside>

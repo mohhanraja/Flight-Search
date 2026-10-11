@@ -1,0 +1,57 @@
+@if (response.inbound) {
+  <div class="legs" role="tablist" aria-label="Choose flight direction">
+    <button
+      type="button"
+      role="tab"
+      class="leg"
+      [class.active]="(activeLeg$ | async) === 'outbound'"
+      [attr.aria-selected]="(activeLeg$ | async) === 'outbound'"
+      (click)="selectLeg('outbound')"
+    >
+      <strong>Outbound</strong>
+      <span>{{ params.from }} &rarr; {{ params.to }} &middot; {{ params.departureDate | date: 'd MMM' }}</span>
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="leg"
+      [class.active]="(activeLeg$ | async) === 'inbound'"
+      [attr.aria-selected]="(activeLeg$ | async) === 'inbound'"
+      (click)="selectLeg('inbound')"
+    >
+      <strong>Return</strong>
+      <span>{{ params.to }} &rarr; {{ params.from }} &middot; {{ params.returnDate | date: 'd MMM' }}</span>
+    </button>
+  </div>
+}
+
+@if (view$ | async; as vm) {
+  @if (vm.total === 0) {
+    <div class="empty card">
+      <h2>No flights found</h2>
+      <p>We couldn't find any flights for this route and date. Try a different date.</p>
+    </div>
+  } @else {
+    <div class="layout">
+      <details class="filters-wrap" open>
+        <summary>Filters &amp; sorting</summary>
+        <app-filter-panel [options]="vm.options" (filtersChange)="onFiltersChange($event)" />
+      </details>
+
+      <section class="results" aria-live="polite">
+        <p class="count">
+          Showing <strong>{{ vm.flights.length }}</strong> of {{ vm.total }} flights
+        </p>
+
+        @for (flight of vm.flights; track flight.id) {
+          <app-flight-card [flight]="flight" [passengers]="params.passengers" />
+        } @empty {
+          <div class="empty card">
+            <h2>No flights match your filters</h2>
+            <p>Try raising the max price or allowing more stops.</p>
+          </div>
+        }
+      </section>
+    </div>
+  }
+}
